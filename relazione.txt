@@ -1,0 +1,74 @@
+In riferimento al codice della traccia (che fa riferimento ad una backdoor),
+andiamo ad anallizzare e spiegare passo passo i vari comandi.
+
+import socket, platform, os (il SOCKET di rete viene utilizzato per consentire lo scambio di pacchetti tra due
+                             computer, uno sorgente ed uno destinatario).
+                            (il modulo PLATFORM serve per identificare il sistema operativo che si sta utilizzando)
+			    (OS permette di interaggire con il sistema operativo in modo efficace)
+
+SRV_ADDR = ""               (è una variabile per memorizzare gli indirizzi IP)
+
+SRV PORT 1234               (è una variabile per memorizzarew il numero di porte del server)
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) s.bind((SRV_ADDR, SRV_PORT))  (questa funzione specifica che vogliamo
+                                                                                     un socket che utilizzi IPV4 ed una connessione
+                                                                                     TCP).
+                                                                                    (s.bind serve per associare il socket al IP:porta)
+
+
+s.listen(1)                 (configura il socket in ascolto sulla coppia IP:porta) (1) = backlog massimo numero di connessioni in coda
+
+connection, address = s.accept()    (connection identifica la comunicazione che verrà utilizzata per lo scambio dei dati)
+                                    (address è l'IPV4 del client che si connette)
+                                    (s.accept è il metodo per accettare la connessione in entrata)
+
+
+print ("client connected: ", address)      (stampa a schermo l'avvenuta connessione ed il relativo IPV4)
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+while 1:                         (while 1 è un ciclo sempre VERO perche in python 1 = vero; quindi il ciclo while è un ciclo infinito)
+                                   
+try:                             (try viene utilizzato per iniziare il blocco di codice e in caso di eventuali errori passa ad except)
+
+data connection.recv(1024) except:continue   (data contiene i dati ricevuti dal client, connection.recv si utilizza per ricevere i 
+                                              dati dal client e (1024) rappresenta in numero massimo di caratteri).
+                                             (except:continue in caso di errore in try il codice passa in questa fase e quindi in 
+                                              except)
+
+       
+if(data.decode('utf-8') = '1');                                                          (se i dati decodificati sono '1', il server 
+tosend = platform.platform() +" "platform.machine()                                       risponderà info sulla piattaforma e sull'
+connection.sendall(tosend.encode())                                                       architettura della macchina)
+                    
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\                                    
+
+elif(data.decode('utf-8') = '2'):                          (se i dati decodificati sono '2', il server riceverà un percorso sulla
+data connection.recv(1024)                                  richiesta successiva e risponderà con una lista file nella directory
+try:                                                        corrispondente)
+filelist = os.listdir(data.decode('utf-8'))
+tosend = ""
+for x in filelist:
+tosend += "," + x
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+except:                                            (se i dati decodificati sono '0', il server chiuderà la connessione con il client)                                               
+tosend = "wrong path"
+connection.sendall(tosend.encode())
+elif(data.decode('utf-8') = '0'):
+connection.close()
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+connection, address = s.accept()
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+Una backdoor è  una vulnerabilità intenzionale nel software che permette l'accesso non autorizzato ad un sistema informatico.
+Una backdoor può essere utilizzata da un attaccante per bypassare le procedure di autenticazione ed ottenere un accesso 
+al sistema. Questo accesso può essere utilizzato  per scopi malevoli, come furto di dati sensibili, installazione di malware 
+oppure dannegiare il sistema stesso.
+
+
+
